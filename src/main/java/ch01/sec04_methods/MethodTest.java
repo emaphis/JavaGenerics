@@ -22,5 +22,8 @@ public class MethodTest {
         Lists.addAll(ints, new Integer[] {3, 4 });
         System.out.println("ints: " + ints);
 
+        // explicit type parameter pp 11
+        List<Integer> ints2 = Lists.<Integer>toList2();
+        List<Object> objs = Lists.<Object>toList2(1, "two");
     }
 }
