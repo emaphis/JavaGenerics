@@ -4,11 +4,13 @@
  *  1 Suptypes
  *  2 Wildcards with extends
  *  3 Wildcards with super
+ *  4 The Get and Put Principle
  */
 package ch02.sec02_wildcards;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -77,8 +79,78 @@ public class WildcardsTest {
         System.out.println("objs: " + objs);
     }
 
+    /**
+     * Gets from the nums collection so use "? extends E"
+     * 2.4 pg 20.
+     * @param nums collection to "gets" from
+     * @return sum.
+     */
+    public static double sum(Collection<? extends Number> nums) {
+        double s = 0.0;
+        for (Number num : nums) s += num.doubleValue();
+        return s;
+    }
+
+    public static void testSum() {
+        List<Integer> ints = Arrays.asList(1,2,3);
+        System.out.println("ints: " + sum(ints));
+
+        List<Double> doubles = Arrays.asList(2.78,3.14);
+        System.out.println("doubles: " + sum(doubles));
+
+        List<Number> nums = Arrays.<Number>asList(1,2,2.78,3.14);
+        System.out.println("nums: " + sum(nums));
+    }
+
+    /**
+     * Add a series of incremented numbers to a collection
+     * puts values into a collection so us "? super E".
+     * 4.2 pg 20
+     * @param ints collection to add a series of numbers
+     * @param n number of numbers to add
+     */
+    public static void count(Collection<? super Integer> ints, int n) {
+        for (int i = 0; i < n; i++) ints.add(i);
+    }
+
+    public static void testCount() {
+        List<Integer> ints = new ArrayList<>();
+        count(ints, 5);
+        System.out.println("ints: " + ints);
+
+        List<Number> nums = new ArrayList<>();
+        count(nums, 5); nums.add(5.0);
+        System.out.println("nums: " + nums);
+
+        List<Object> objs = new ArrayList<>();
+        count(objs, 5); objs.add("five");
+        System.out.println("objs: " + objs);
+    }
+
+    /**
+     * don't use wildcard when you puts and gets from same Collection
+     * nums must be a collection of number
+     * 4.2 pp 20,21
+     * @param nums
+     * @param n
+     * @return sum of count
+     */
+    public static double sumCount(Collection<Number> nums, int n) {
+        count(nums, n);
+        return sum(nums);
+    }
+
+    public static void testSumCount() {
+        List<Number> nums = new ArrayList<>();
+        double sum = sumCount(nums, 5);
+        System.out.println("sum of count: " + sum);
+    }
+
     public static void main(String[] args) {
         extendsTest();
         testCopy();
+        testSum();
+        testCount();
+        testSumCount();
     }
 }
